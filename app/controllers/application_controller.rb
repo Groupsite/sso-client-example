@@ -7,4 +7,8 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
+  
+  def redirect_to_groupsite
+    redirect_to "http://network.bioworksplace.dev"
+  end
 end
