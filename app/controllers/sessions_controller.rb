@@ -11,4 +11,10 @@ class SessionsController < ApplicationController
     end
   end
   
+  def destroy
+    reset_session
+    cookies.delete(:cx_shssn, :domain => 'bioworksplace.dev')
+    redirect_to login_path
+  end
+  
 end

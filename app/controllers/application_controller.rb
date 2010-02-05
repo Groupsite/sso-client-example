@@ -1,5 +1,7 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
+require 'digest'
+require 'base64'
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
@@ -9,8 +11,9 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   helper_method :groupsite_url
 
-  # Scrub sensitive parameters from your log
-  # filter_parameter_logging :password
+  SHARED_KEY = "317f4fe157e9679de0a84d8fc8bf7fbb"
+
+protected
   
   def logged_in?
     !!current_user
@@ -24,6 +27,8 @@ class ApplicationController < ActionController::Base
   def current_user=(user)
     session[:user_id] = user.id
     @current_user = user
+    create_shared_session_cookie
+    @current_user
   end
   
   def logout!
@@ -40,6 +45,18 @@ class ApplicationController < ActionController::Base
   
   def groupsite_url
     "http://network.bioworksplace.dev"
+  end
+  
+  def create_shared_session_cookie
+    payload = "shsid=#{session.id}|shuid=#{session[:user_id]}|shorg=EX"
+    cookies[:cx_shssn] = {
+      :value => "#{payload}$#{digest(payload)}$",
+      :domain => 'bioworksplace.dev'
+    }
+  end
+  
+  def digest(payload)
+    Digest::MD5.digest("#{payload}#{SHARED_KEY}").unpack('H*').first
   end
   
 end
