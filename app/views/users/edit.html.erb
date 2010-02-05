@@ -1,5 +1,11 @@
 <h1>My Account</h1>
 
+<% if flash[:info] %>
+  <p style="color: green">
+    <%=h flash[:info] %>
+  </p>
+<% end %>
+
 <p>
   <%= link_to "Take Me to The Groupsite", groupsite_url %>
 </p>

@@ -1,5 +1,11 @@
 <h1>Join</h1>
 
+<% if flash[:info] %>
+  <p style="color: green">
+    <%=h flash[:info] %>
+  </p>
+<% end %>
+
 <% form_for(@user) do |f| %>
   <%= render :partial => "form", :locals => { :f => f } %>
   <p>
