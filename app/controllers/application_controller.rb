@@ -1,6 +1,6 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
-require 'digest'
+require 'openssl'
 require 'base64'
 
 class ApplicationController < ActionController::Base
@@ -9,54 +9,51 @@ class ApplicationController < ActionController::Base
 
   helper_method :logged_in?
   helper_method :current_user
-  helper_method :groupsite_url
 
-  SHARED_KEY = "317f4fe157e9679de0a84d8fc8bf7fbb"
+  include SsoConfig
 
 protected
-  
+
   def logged_in?
     !!current_user
   end
-  
+
   def current_user
     return @current_user if defined?(@current_user)
     @current_user = User.find_by_id(session[:user_id])
   end
-  
+
   def current_user=(user)
     session[:user_id] = user.id
     @current_user = user
     create_shared_session_cookie
     @current_user
   end
-  
+
   def logout!
     session[:user_id] = nil
+    cookies.delete(shared_cookie_name, :domain => shared_domain)
     @current_user = nil
   end
-  
+
   def login_required
     unless logged_in?
       flash[:error] = "You must be logged in"
       redirect_to login_path
     end
   end
-  
-  def groupsite_url
-    "http://network.bioworksplace.dev"
-  end
-  
+
   def create_shared_session_cookie
-    payload = "shsid=#{session.id}|shuid=#{session[:user_id]}|shorg=EX"
-    cookies[:cx_shssn] = {
-      :value => "#{payload}$#{digest(payload)}$",
-      :domain => 'bioworksplace.dev'
+    cookies[shared_cookie_name] = {
+      :value  => encrypt(current_user.to_pipe_delimited_string),
+      :domain => shared_domain,
     }
   end
-  
-  def digest(payload)
-    Digest::MD5.digest("#{payload}#{SHARED_KEY}").unpack('H*').first
+
+  def encrypt(payload)
+    c = OpenSSL::Cipher::Cipher.new("aes-256-cbc").encrypt
+    c.key = c.iv = cypher_key
+    Base64.encode64(c.update(payload) + c.final)
   end
-  
+
 end

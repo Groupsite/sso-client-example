@@ -1,6 +1,6 @@
 <h1>Login</h1>
 
-<% form_tag do %>
+<% form_tag session_url do %>
 
   <% if flash[:error] %>
     <p style="color: red">
@@ -12,21 +12,17 @@
     <%= label_tag :username %>
     <%= text_field_tag :username %>
   </p>
-  
+
   <p>
     <%= label_tag :password %>
     <%= password_field_tag :password %>
   </p>
-  
+
   <p>
     <%= submit_tag "Login" %>
   </p>
 <% end %>
 
 <p>
-  <%= link_to "Join", join_path %>
-</p>
-
-<p>
-  <%= link_to "Reset Password", reset_password_path %>
+  <%= link_to "Join", new_user_url %>
 </p>

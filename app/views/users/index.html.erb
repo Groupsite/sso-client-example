@@ -1,0 +1,13 @@
+<ul>
+  <% @users.each do |user| %>
+
+    <li>
+      <%=h user.first_name %>
+      <%=h user.last_name %>
+      <code>
+        user.to_pipe_delimited_string
+      </code>
+    </li>
+
+  <% end %>
+</ul>

@@ -5,7 +5,7 @@
 # Make sure the secret is at least 30 characters and all random, 
 # no regular words or you'll be exposed to dictionary attacks.
 ActionController::Base.session = {
-  :key         => '_bioworks_session',
+  :key         => '_test_gs_sso_session',
   :secret      => '130797c67ca42fedabd489d91d36f7fda29a76380edc53bda948eb959df59f8ec3a4aaa053bf15c952a7f6376c5334dff45066c31e2e4fbfbc68d85db7979fbe'
 }
 
