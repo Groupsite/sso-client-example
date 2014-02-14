@@ -4,3 +4,6 @@ tmp/**/*
 db/*.sqlite3
 db/schema.rb
 *~
+config/shared_cookie_name.txt
+config/shared_domain.txt
+config/shared_key.txt
