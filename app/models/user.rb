@@ -14,8 +14,9 @@ class User < ActiveRecord::Base
       [:city, city],
       [:state, state],
       [:postal_code, zip],
-      [:country, "United States"],
+      [:country, country],
       [:timezone, "Eastern Time (US & Canada)"],
+      [:groups, groups]
     ].map do |k,v|
       "#{k}=#{v}"
     end.join("|")

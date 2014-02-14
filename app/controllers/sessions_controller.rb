@@ -6,7 +6,11 @@ class SessionsController < ApplicationController
     @user = User.find_by_username_and_password(params[:username], params[:password])
     if @user
       self.current_user = @user
-      redirect_to url_for(@user)
+      if cookies["#{shared_cookie_name}_back_to"]
+        redirect_to cookies["#{shared_cookie_name}_back_to"]
+      else
+        redirect_to url_for(@user)
+      end
     else
       flash[:error] = "Login Failed"
       redirect_to :action => "new"

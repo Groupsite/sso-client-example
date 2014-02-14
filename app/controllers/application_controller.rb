@@ -44,10 +44,10 @@ protected
   end
 
   def create_shared_session_cookie
-    cookies[shared_cookie_name] = {
-      :value  => encrypt(current_user.to_pipe_delimited_string),
+    logger.info((cookies[shared_cookie_name] = {
+      :value  => encrypt(current_user.to_pipe_delimited_string + "|expires_at=#{1.hours.from_now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")}"),
       :domain => shared_domain,
-    }
+    }).inspect)
   end
 
   def encrypt(payload)
