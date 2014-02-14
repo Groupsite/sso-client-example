@@ -1,8 +1,6 @@
-ActionController::Routing::Routes.draw do |map|
-
-  map.login '/login', :controller => "sessions", :action => "new", :conditions => {:method => :get }
-  map.logout '/logout', :controller => "sessions", :action => "destroy"
-
-  map.resources :users
-  map.resource :session
+SsoClientExample::Application.routes.draw do
+  match '/login' => 'sessions#new', :as => :login, :via => :get
+  match '/logout' => 'sessions#destroy', :as => :logout
+  resources :users
+  resource :session
 end

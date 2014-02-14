@@ -14,10 +14,9 @@
   <%= link_to "Take Me to The Groupsite", SsoConfig.groupsite_url %>
 </p>
 
-<% form_for(@user) do |f| %>
+<%= form_for(@user) do |f| %>
   <%= render :partial => "form", :locals => { :f => f } %>
   <p>
     <%= f.submit 'Update' %>
   </p>
 <% end %>
- 
